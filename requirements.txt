@@ -1,0 +1,15 @@
+# Polymarket AI - Production Dependencies
+
+# HTTP requests library
+requests>=2.31.0
+
+# Веб-версія (polymarket_ai/webapp)
+flask>=2.3.0
+
+# Зафіксовано <2: urllib3 v2 вимагає OpenSSL 1.1.1+, а системний Python на macOS
+# (Apple-збірка /usr/bin/python3) лінкований проти LibreSSL — з urllib3 v2 усі
+# HTTPS-запити падають з "Connection error" (NotOpenSSLWarning + мовчазний SSL-фейл).
+urllib3<2
+
+# Optional: для посилення функціональності
+python-dotenv>=1.0.0  # для завантаження змінних з .env файлу

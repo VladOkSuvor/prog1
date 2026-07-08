@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.idea/
+.DS_Store
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Веб-версія: локальний список спостереження — персональні дані користувача,
+# не має потрапляти в git
+polymarket_ai/webapp/watchlist.json
+
+# Кеш перекладів заголовків ринків — генерується локально, не потрібен в git
+polymarket_ai/webapp/translations.json

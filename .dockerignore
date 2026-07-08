@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.git/
+.idea/
+.DS_Store
+tests/
+polymarket_ai/webapp/watchlist.json
+polymarket_ai/webapp/translations.json

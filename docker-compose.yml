@@ -1,0 +1,13 @@
+services:
+  polymarket-ai:
+    build: .
+    ports:
+      - "5050:5050"
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      DEBUG_MODE: "false"
+      LOG_LEVEL: INFO
+    volumes:
+      - ./polymarket_ai/webapp/watchlist.json:/app/polymarket_ai/webapp/watchlist.json
+      - ./polymarket_ai/webapp/translations.json:/app/polymarket_ai/webapp/translations.json
+    restart: unless-stopped

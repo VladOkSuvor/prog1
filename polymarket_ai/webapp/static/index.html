@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polymarket AI</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span>Polymarket <strong>AI</strong></span>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="explorer">Огляд ринків</button>
+    <button class="tab-btn" data-tab="closing">Скоро закриються</button>
+    <button class="tab-btn" data-tab="watchlist">Список спостереження <span id="watchlistCount" class="badge">0</span></button>
+  </nav>
+
+  <div class="topbar-actions">
+    <span id="cacheInfo" class="cache-info">—</span>
+    <button id="refreshBtn" class="btn btn-ghost" title="Примусово оновити дані з Gamma API">⟳ Оновити</button>
+    <button id="settingsBtn" class="btn btn-ghost" title="Groq API ключ">⚙</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= EXPLORER ================= -->
+  <section id="tab-explorer" class="tab-panel active">
+    <div class="filters">
+      <input id="searchInput" type="text" placeholder="Пошук за назвою ринку…" class="input input-search">
+
+      <select id="categorySelect" class="input">
+        <option value="">Усі категорії</option>
+      </select>
+
+      <input id="minVolumeInput" type="number" min="0" placeholder="Мін. обсяг $" class="input input-narrow">
+
+      <input id="minProbInput" type="number" min="0" max="100" placeholder="Ймовір. від %" class="input input-narrow">
+      <input id="maxProbInput" type="number" min="0" max="100" placeholder="Ймовір. до %" class="input input-narrow">
+
+      <select id="maxDaysSelect" class="input">
+        <option value="">Будь-який термін</option>
+        <option value="1">До 24 год</option>
+        <option value="3">До 3 днів</option>
+        <option value="7">До 7 днів</option>
+        <option value="30">До 30 днів</option>
+        <option value="180">До 6 місяців</option>
+      </select>
+
+      <select id="sortSelect" class="input">
+        <option value="volume">За обсягом</option>
+        <option value="closing">За датою закриття</option>
+        <option value="price">За ціною YES</option>
+        <option value="title">За назвою</option>
+      </select>
+
+      <button id="orderToggle" class="btn btn-ghost" title="Напрямок сортування">↓</button>
+    </div>
+
+    <div class="toolbar">
+      <div id="resultsInfo" class="muted">—</div>
+      <div class="toolbar-actions">
+        <button id="scanBtn" class="btn btn-accent">🔎 Сканувати топ-10 на AI-сигнали</button>
+        <button id="exportBtn" class="btn btn-ghost">⬇ Експорт CSV</button>
+      </div>
+    </div>
+
+    <div id="explorerGrid" class="market-grid"></div>
+
+    <div id="pagination" class="pagination"></div>
+  </section>
+
+  <!-- ================= CLOSING SOON ================= -->
+  <section id="tab-closing" class="tab-panel">
+    <div class="filters">
+      <span class="muted">Показати ринки, що закриються протягом:</span>
+      <select id="windowSelect" class="input">
+        <option value="6">6 год</option>
+        <option value="24" selected>24 год</option>
+        <option value="72">3 дні</option>
+        <option value="168">7 днів</option>
+      </select>
+    </div>
+    <div id="closingGrid" class="market-grid"></div>
+  </section>
+
+  <!-- ================= WATCHLIST ================= -->
+  <section id="tab-watchlist" class="tab-panel">
+    <div id="watchlistGrid" class="market-grid"></div>
+    <p id="watchlistEmpty" class="muted" style="display:none;">Список спостереження порожній. Натисни ☆ на будь-якому ринку, щоб додати його сюди.</p>
+  </section>
+
+</main>
+
+<!-- ================= MODAL: analysis / detail ================= -->
+<div id="analysisModal" class="modal-overlay hidden">
+  <div class="modal">
+    <button class="modal-close" data-close="analysisModal">×</button>
+    <div id="analysisContent"></div>
+  </div>
+</div>
+
+<!-- ================= MODAL: settings ================= -->
+<div id="settingsModal" class="modal-overlay hidden">
+  <div class="modal">
+    <button class="modal-close" data-close="settingsModal">×</button>
+    <h3>Налаштування</h3>
+    <p class="muted">
+      Groq API ключ, потрібний для AI-аналізу сигналів (BUY_YES / BUY_NO / HOLD).
+      Безкоштовний ключ можна створити на console.groq.com/keys.
+      Ключ зберігається лише у цьому браузері (localStorage) і надсилається на локальний
+      сервер лише в заголовку запиту — ніколи не потрапляє у файли проєкту чи git.
+    </p>
+    <input id="apiKeyInput" type="password" placeholder="gsk_…" class="input" style="width:100%;">
+    <div class="modal-actions">
+      <button id="saveKeyBtn" class="btn btn-accent">Зберегти</button>
+      <button id="clearKeyBtn" class="btn btn-ghost">Очистити</button>
+    </div>
+    <p id="keyStatus" class="muted"></p>
+  </div>
+</div>
+
+<!-- ================= MODAL: bulk scan results ================= -->
+<div id="scanModal" class="modal-overlay hidden">
+  <div class="modal modal-wide">
+    <button class="modal-close" data-close="scanModal">×</button>
+    <h3>Результати сканування</h3>
+    <div id="scanContent"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
